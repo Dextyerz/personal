@@ -22,7 +22,8 @@ end
 
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
-    local snipeMessage = "||" .. game.Players.LocalPlayer.Name .. "|| just sniped a "
+    local name = game.Players.LocalPlayer.Name
+    local snipeMessage = "Successfully sniped a "
     local tag = ""
     if version then
         if version == 2 then
@@ -61,23 +62,27 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                 ["timestamp"] = DateTime.now():ToIsoDate(),
                 ['fields'] = {
                     {
-                        ['name'] = "PRICE:",
+                        ['name'] = "Account Name:",
+                        ['value'] = tostring(name),
+                    },
+                    {
+                        ['name'] = "Price:",
                         ['value'] = tostring(gems) .. " GEMS",
                     },
                     {
-                        ['name'] = "PURCHASED FROM:",
+                        ['name'] = "Purchased From:",
                         ['value'] = "||" .. tostring(boughtFrom) .. "||",
                     },
                     {
-                        ['name'] = "AMOUNT:",
+                        ['name'] = "Amount:",
                         ['value'] = tostring(amount) .. "x",
                     },
                     {
-                        ['name'] = "REMAINING GEMS:",
+                        ['name'] = "Remaining Gems:",
                         ['value'] = tostring(gemamount) .. "💎",
                     },      
                     {
-                        ['name'] = "PETID:",
+                        ['name'] = "Pet ID:",
                         ['value'] = "||" .. tostring(uid) .. "||",
                     },
                 },
@@ -109,7 +114,6 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     pcall(function()
         type = Library.Directory.Pets[item]
 end)
-
 
     if type.exclusiveLevel and gems <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
