@@ -55,7 +55,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     end
     
     message1 = {
-        ['content'] = "@everyone",
+        ['content'] = "Gacor  <@870106984236609656>",
         ['embeds'] = {
             {
                 ['title'] = snipeMessage,
