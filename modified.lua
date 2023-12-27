@@ -48,7 +48,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     if string.find(item, "Huge") then
         tag = "<@870106984236609656> NEW HUGE BABY"
     elseif string.find(item, "Titanic") then
-        tag = "<@870106984236609656> RAWRRR GOT TITANIC BRO"
+        tag = "@everyone RAWRRR GOT TITANIC BRO"
     elseif item == "Titanic Christmas Present" then
         tag = ""
     end
