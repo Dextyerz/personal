@@ -52,7 +52,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         snipeMessage = snipeMessage .. " Shiny "
     end
     
-    snipeMessage = snipeMessage .. "***" .. (item) .. "***"
+    snipeMessage = snipeMessage .. "**" .. (item) .. "**"
     
     if amount == nil then
         amount = 1
