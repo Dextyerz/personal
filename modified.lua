@@ -192,13 +192,6 @@ local function jumpToServer()
     game:GetService("TeleportService"):TeleportToPlaceInstance(15502339080, servers[math.random(1, randomCount)], game:GetService("Players").LocalPlayer) 
 end
 
-TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
-                print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
-                Librarys.Alert.Message("Tp Retry... :" .. msg)
-                wait(10)
-                jumpToServer()
-        end) 
-
 while wait(0.1) do
     PlayerInServer = #Players:GetPlayers()
     if PlayerInServer < 25 or os.time() >= ostime + 1020 then
