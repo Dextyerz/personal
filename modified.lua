@@ -181,10 +181,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
 end)
 
 TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
-                print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
-                config.servers.pageDeep = config.servers.pageDeep + 1
-                Library.Alert.Message("Tp Retry... :" .. msg)
-                wait(config.delays.whileError)
+                wait(5)
                 jumpToServer()
         end) 
 
