@@ -8,7 +8,6 @@ local Players = game:GetService('Players')
 local PlayerInServer = #Players:GetPlayers()
 local ostime = os.time()
 
-
 if not getgenv().a then
     getgenv().a = true
     local vu = game:GetService("VirtualUser")
@@ -21,19 +20,14 @@ if not getgenv().a then
 end
 
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
-    print(uid, gems, item, version, shiny, amount, boughtFrom)
-    print("BOUGHT FROM:", boughtFrom)
-    print("UID:", uid)
-    print("GEMS:", gems)
-    print("ITEM:", item)
-    local snipeMessage = "||" .. game.Players.LocalPlayer.Name .. "|| just sniped a"
+    local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
+    local snipeMessage = "||" .. game.Players.LocalPlayer.Name .. "|| just sniped a "
     local tag = ""
-
     if version then
         if version == 2 then
-            version = " Rainbow"
+            version = "Rainbow"
         elseif version == 1 then
-            version = " Golden"
+            version = "Golden"
         end
     else
        version = ""
@@ -44,21 +38,15 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     if shiny then
         snipeMessage = snipeMessage .. " Shiny"
     end
-
-    
     
     snipeMessage = snipeMessage .. " " .. (item)
+    
+    if amount == nil then
+        amount = 1
+    end
+
     if string.find(item, "Huge") then
         tag = "<@870106984236609656> NEW HUGE BABY"
-    end
-    
-    print(snipeMessage)
-    
-    if amount then
-        print("AMOUNT:", amount)
-    else
-        amount = 1
-        print("AMOUNT:", amount)
     end
     
     message1 = {
@@ -75,15 +63,19 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     },
                     {
                         ['name'] = "PURCHASED FROM:",
-                        ['value'] = tostring(boughtFrom),
+                        ['value'] = "||" .. tostring(boughtFrom) .. "||",
                     },
                     {
                         ['name'] = "AMOUNT:",
                         ['value'] = tostring(amount),
                     },
                     {
+                        ['name'] = "REMAINING GEMS:",
+                        ['value'] = tostring(gemamount),
+                    },      
+                    {
                         ['name'] = "PETID:",
-                        ['value'] = tostring(uid),
+                        ['value'] = "||" .. tostring(uid) .. "||",
                     },
                 },
             },
@@ -92,7 +84,19 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
 
     local http = game:GetService("HttpService")
     local jsonMessage = http:JSONEncode(message1)
-    http:PostAsync(getgenv().webhook, jsonMessage)
+    local success, response = pcall(function()
+            http:PostAsync(getgenv().webhook, jsonMessage)
+    end)
+    if success == false then
+            local response = request({
+            Url = webhook,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = jsonMessage
+        })
+    end
 end
 
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
@@ -197,4 +201,10 @@ while wait(0.1) do
             break
         end
     end
-end 
+    for i,v in pairs (game.Players:GetPlayers()) do
+        if v:IsInGroup(5060810) then
+            jumpToServer()
+            break
+        end
+    end
+end
