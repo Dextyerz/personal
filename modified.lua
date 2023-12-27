@@ -26,9 +26,9 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     local tag = ""
     if version then
         if version == 2 then
-            version = "Rainbow"
+            version = "Rainbow "
         elseif version == 1 then
-            version = "Golden"
+            version = "Golden "
         end
     else
        version = ""
@@ -37,10 +37,10 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     snipeMessage = snipeMessage .. version
     
     if shiny then
-        snipeMessage = snipeMessage .. " Shiny"
+        snipeMessage = snipeMessage .. " Shiny "
     end
     
-    snipeMessage = snipeMessage .. " " .. (item)
+    snipeMessage = snipeMessage .. "***" .. (item) .. "***"
     
     if amount == nil then
         amount = 1
@@ -70,11 +70,11 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     },
                     {
                         ['name'] = "AMOUNT:",
-                        ['value'] = tostring(amount),
+                        ['value'] = tostring(amount) .. "x",
                     },
                     {
                         ['name'] = "REMAINING GEMS:",
-                        ['value'] = tostring(gemamount),
+                        ['value'] = tostring(gemamount) .. "💎",
                     },      
                     {
                         ['name'] = "PETID:",
