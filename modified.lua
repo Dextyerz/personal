@@ -1,4 +1,5 @@
 local ostime = os.time()
+local TeleportService = game:GetService("TeleportService")
 repeat wait() until game:IsLoaded()
 
 setfpscap(8)
@@ -178,6 +179,14 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
         end
     end
 end)
+
+TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
+                print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
+                config.servers.pageDeep = config.servers.pageDeep + 1
+                Library.Alert.Message("Tp Retry... :" .. msg)
+                wait(config.delays.whileError)
+                jumpToServer()
+        end) 
 
 local function jumpToServer() 
     local sfUrl = "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=%s&limit=%s&excludeFullGames=true" 
