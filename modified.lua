@@ -20,6 +20,16 @@ if not getgenv().a then
     
 end
 
+task.spawn(function()    
+    game:GetService("GuiService").ErrorMessageChanged:Connect(function()
+        game.Players.LocalPlayer:Kick("Found An Error, Reconnecting...")
+        print("Found An Error, Reonnecting...")
+        wait (0.1) game:GetService("TeleportService"):Teleport(game.PlaceId)
+            end);
+        end)
+print("Executed Auto-Reconnect")
+
+
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
     local name = game.Players.LocalPlayer.Name
