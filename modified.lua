@@ -1,3 +1,4 @@
+local ostime = os.time()
 repeat wait() until game:IsLoaded()
 
 setfpscap(8)
@@ -6,7 +7,6 @@ local Booths_Broadcast = game:GetService("ReplicatedStorage").Network:WaitForChi
 local message1 = {}
 local Players = game:GetService('Players')
 local PlayerInServer = #Players:GetPlayers()
-local ostime = os.time()
 local Librarys = require(game.ReplicatedStorage:WaitForChild('Library'))
 
 if not getgenv().a then
@@ -201,7 +201,7 @@ TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
 
 while wait(0.1) do
     PlayerInServer = #Players:GetPlayers()
-    if PlayerInServer < 25 or os.time() >= ostime + 1080 then
+    if PlayerInServer < 25 or os.time() >= ostime + 1020 then
         jumpToServer()
         break
     end
