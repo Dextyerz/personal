@@ -26,7 +26,9 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     print("UID:", uid)
     print("GEMS:", gems)
     print("ITEM:", item)
-    local snipeMessage = game.Players.LocalPlayer.Name .. " just sniped a "
+    local snipeMessage = "||" .. game.Players.LocalPlayer.Name .. "|| just sniped a "
+    local tag = ""
+
     if version then
         if version == 2 then
             version = "Rainbow"
@@ -34,7 +36,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
             version = "Golden"
         end
     else
-       version = "Normal"
+       version = ""
     end
     
     snipeMessage = snipeMessage .. version
@@ -42,8 +44,13 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     if shiny then
         snipeMessage = snipeMessage .. " Shiny"
     end
+
+    
     
     snipeMessage = snipeMessage .. " " .. (item)
+    if string.find(item, "Huge") then
+        tag = "<@870106984236609656> NEW HUGE BABY"
+    end
     
     print(snipeMessage)
     
@@ -55,7 +62,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     end
     
     message1 = {
-        ['content'] = "Gacor  <@870106984236609656>",
+        ['content'] = tag,
         ['embeds'] = {
             {
                 ['title'] = snipeMessage,
@@ -67,7 +74,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                         ['value'] = tostring(gems) .. " GEMS",
                     },
                     {
-                        ['name'] = "BOUGHT FROM:",
+                        ['name'] = "PURCHASED FROM FROM:",
                         ['value'] = tostring(boughtFrom),
                     },
                     {
