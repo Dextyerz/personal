@@ -7,6 +7,7 @@ local message1 = {}
 local Players = game:GetService('Players')
 local PlayerInServer = #Players:GetPlayers()
 local ostime = os.time()
+local Librarys = require(game.ReplicatedStorage:WaitForChild('Library'))
 
 if not getgenv().a then
     getgenv().a = true
@@ -190,6 +191,13 @@ local function jumpToServer()
     end
     game:GetService("TeleportService"):TeleportToPlaceInstance(15502339080, servers[math.random(1, randomCount)], game:GetService("Players").LocalPlayer) 
 end
+
+TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
+                print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
+                Librarys.Alert.Message("Tp Retry... :" .. msg)
+                wait(10)
+                jumpToServer()
+        end) 
 
 while wait(0.1) do
     PlayerInServer = #Players:GetPlayers()
