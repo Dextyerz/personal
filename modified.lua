@@ -181,9 +181,11 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
 end)
 
 TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
-                wait(5)
+                print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
+                wait(10)
                 jumpToServer()
         end) 
+
 
 local function jumpToServer() 
     local sfUrl = "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=%s&limit=%s&excludeFullGames=true" 
