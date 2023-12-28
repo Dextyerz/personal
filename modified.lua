@@ -238,8 +238,11 @@ Players.PlayerAdded:Connect(function(player)
 end) 
 
 game:GetService("RunService").Stepped:Connect(function()
-    PlayerInServer = #getPlayers
-    if PlayerInServer < 25 or math.floor(os.clock() - osclock) >= math.random(900, 1200) then
+    local getPlayers = game:GetService("Players"):GetPlayers()
+    local PlayerInServer = #getPlayers
+    local osclock = os.clock()
+    
+    if PlayerInServer < 25 or os.time() >= ostime + 1080 then
         jumpToServer()
     end
 end)
