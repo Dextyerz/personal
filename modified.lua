@@ -10,6 +10,12 @@ local Players = game:GetService('Players')
 local PlayerInServer = #Players:GetPlayers()
 local Librarys = require(game.ReplicatedStorage:WaitForChild('Library'))
 
+for i,v in ipairs(game.Players:GetPlayers()) do
+    if v.UserId ~= game.Players.LocalPlayer.UserId and v.Character then
+        v.Character:ClearAllChildren()
+    end
+end
+
 if not getgenv().a then
     getgenv().a = true
     local vu = game:GetService("VirtualUser")
