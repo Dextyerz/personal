@@ -21,8 +21,6 @@ while True:
             if not pid:
                 subprocess.run(f"{adb} -s {instance} shell am start -a android.intent.action.VIEW -d roblox://placeId={place_id}")
                 print(f"Launched into game using {instance}")
-                instance_status[instance] = True  # Mark the instance as launched for the placeId
-        else:
-            # Add additional checks or actions if needed for instances already launched
+                instance_status[instance] = True 
 
     time.sleep(1)
