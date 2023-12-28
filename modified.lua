@@ -96,7 +96,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     },
                     {
                         ['name'] = "Remaining Gems:",
-                        ['value'] = tostring(gemamount) .. "💎",
+                        ['value'] = tostring(gemamount) .. " 💎",
                     },      
                     {
                         ['name'] = "Pet ID:",
