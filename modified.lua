@@ -27,6 +27,12 @@ if not getgenv().a then
     
 end
 
+local bb = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:Connect(function()
+    bb:CaptureController()
+    bb:ClickButton2(Vector2.new())
+end)
+
 task.spawn(function()    
     game:GetService("GuiService").ErrorMessageChanged:Connect(function()
         game.Players.LocalPlayer:Kick("Found An Error, Reconnecting...")
