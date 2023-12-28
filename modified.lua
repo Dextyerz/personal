@@ -21,9 +21,6 @@ for i = 1, PlayerInServer do
             jumpToServer()
         end
     end
-    if getPlayers[i]:IsInGroup(5060810) or getPlayers[i]:IsInGroup(1200769) then
-        jumpToServer()
-    end
 end
 
 local vu = game:GetService("VirtualUser")
