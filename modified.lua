@@ -1,31 +1,38 @@
 local ostime = os.time()
-local TeleportService = game:GetService("TeleportService")
-repeat wait() until game:IsLoaded()
+local ts = game:GetService("TeleportService")
+repeat task.wait() until game:IsLoaded()
 
 setfpscap(8)
 game:GetService("RunService"):Set3dRenderingEnabled(false)
 local Booths_Broadcast = game:GetService("ReplicatedStorage").Network:WaitForChild("Booths_Broadcast")
 local message1 = {}
 local Players = game:GetService('Players')
-local PlayerInServer = #Players:GetPlayers()
+local getPlayers = Players:GetPlayers()
+local PlayerInServer = #getPlayers
+local http = game:GetService("HttpService")
 local Librarys = require(game.ReplicatedStorage:WaitForChild('Library'))
 
-for i,v in ipairs(game.Players:GetPlayers()) do
-    if v.UserId ~= game.Players.LocalPlayer.UserId and v.Character then
-        v.Character:ClearAllChildren()
+for i = 1, PlayerInServer do
+   if getPlayers[i] ~= Players.LocalPlayer and getPlayers[i].Character then
+      getPlayers[i].Character:ClearAllChildren()
+   end
+   for ii = 1,#alts do
+        if getPlayers[i].Name == alts[ii] and alts[ii] ~= Players.LocalPlayer.Name then
+            jumpToServer()
+        end
+    end
+    if getPlayers[i]:IsInGroup(5060810) or getPlayers[i]:IsInGroup(1200769) then
+        jumpToServer()
     end
 end
 
-if not getgenv().a then
-    getgenv().a = true
-    local vu = game:GetService("VirtualUser")
-    game:GetService("Players").LocalPlayer.Idled:connect(function()
-        vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-        wait(1)
-        vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-    end)
-    
-end
+local vu = game:GetService("VirtualUser")
+Players.LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   task.wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+
 
 Players.PlayerRemoving:Connect(function(plr)
     if plr == game.Players.LocalPlayer then
@@ -38,7 +45,6 @@ game:GetService("Players").LocalPlayer.Idled:Connect(function()
     bb:CaptureController()
     bb:ClickButton2(Vector2.new())
 end)
-
 
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
@@ -164,8 +170,8 @@ end)
 end
 
 Booths_Broadcast.OnClientEvent:Connect(function(username, message)
-    local playerID = message['PlayerID']
-    if type(message) == "table" then
+    if type(message) == "table" and message['PlayerID'] then
+        local playerID = message['PlayerID']
         local listing = message["Listings"]
         for key, value in pairs(listing) do
             if type(value) == "table" then
@@ -189,7 +195,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
     end
 end)
 
-TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
+ts.TeleportInitFailed:Connect(function(player, resultEnum, msg)
                 print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
                 wait(10)
                 jumpToServer()
@@ -199,40 +205,44 @@ TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
 local function jumpToServer() 
     local sfUrl = "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=%s&limit=%s&excludeFullGames=true" 
     local req = request({ Url = string.format(sfUrl, 15502339080, "Desc", 100) }) 
-    local body = game:GetService("HttpService"):JSONDecode(req.Body) 
+    local body = http:JSONDecode(req.Body) 
     local deep = math.random(1, 3)
     if deep > 1 then 
-        for i = 1, deep, 1 do 
-            req = request({ Url = string.format(sfUrl .. "&cursor=" .. body.nextPageCursor, 15502339080, "Desc", 100) }) 
-            body = game:GetService("HttpService"):JSONDecode(req.Body) 
-            task.wait(0.1)
+        for i = 1, deep do 
+             req = request({ Url = string.format(sfUrl .. "&cursor=" .. body.nextPageCursor, 15502339080, "Desc", 100) }) 
+             body = http:JSONDecode(req.Body) 
+             task.wait(0.1)
         end 
     end 
     local servers = {} 
     if body and body.data then 
-        for i, v in next, body.data do 
-            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
-                table.insert(servers, 1, v.id)
+        for i = 1, #body.data do 
+            if type(i) == "table" and tonumber(i.playing) and tonumber(i.maxPlayers) and i.playing < i.maxPlayers and i.id ~= game.JobId then
+                table.insert(servers, 1, i.id)
             end
         end
     end
     local randomCount = #servers
     if not randomCount then
-        randomCount = 2
+       randomCount = 2
     end
-    game:GetService("TeleportService"):TeleportToPlaceInstance(15502339080, servers[math.random(1, randomCount)], game:GetService("Players").LocalPlayer) 
+    ts:TeleportToPlaceInstance(15502339080, servers[math.random(1, randomCount)], game:GetService("Players").LocalPlayer) 
 end
 
-while wait(0.1) do
-    PlayerInServer = #Players:GetPlayers()
-    if PlayerInServer < 25 or os.time() >= ostime + 1080 then
+Players.PlayerAdded:Connect(function(player)
+    if player:IsInGroup(5060810) or player:IsInGroup(1200769) then
         jumpToServer()
-        break
     end
-    for count = 1, #alts, 1 do
-        if game.Players:FindFirstChild(alts[count]) and alts[count] ~= game:GetService("Players").LocalPlayer.Name then
+    for i = 1,#alts do
+        if  player.Name == alts[i] and alts[i] ~= Players.LocalPlayer.Name then
             jumpToServer()
-            break
         end
     end
-end
+end) 
+
+game:GetService("RunService").Stepped:Connect(function()
+    PlayerInServer = #getPlayers
+    if PlayerInServer < 25 or math.floor(os.clock() - osclock) >= math.random(900, 1200) then
+        jumpToServer()
+    end
+end)
