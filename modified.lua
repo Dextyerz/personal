@@ -27,20 +27,17 @@ if not getgenv().a then
     
 end
 
+Players.PlayerRemoving:Connect(function(plr)
+    if plr == game.Players.LocalPlayer then
+      game:GetService('TeleportService'):Teleport(game.PlaceId)
+    end
+end)
+
 local bb = game:GetService("VirtualUser")
 game:GetService("Players").LocalPlayer.Idled:Connect(function()
     bb:CaptureController()
     bb:ClickButton2(Vector2.new())
 end)
-
-task.spawn(function()    
-    game:GetService("GuiService").ErrorMessageChanged:Connect(function()
-        game.Players.LocalPlayer:Kick("Found An Error, Reconnecting...")
-        print("Found An Error, Reonnecting...")
-        wait (0.1) game:GetService("TeleportService"):Teleport(game.PlaceId)
-            end);
-        end)
-print("Executed Auto-Reconnect")
 
 
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
