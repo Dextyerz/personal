@@ -4,7 +4,6 @@ import time
 adb = "C:/LDPlayer/LDPlayer4.0/adb.exe"
 place_id = "8737899170"
 
-# Dictionary untuk melacak status instance dan apakah sudah diluncurkan untuk placeId tertentu
 instance_status = {}
 
 def listADB():
@@ -14,16 +13,14 @@ def listADB():
 while True:
     instances = listADB()
     for instance in instances:
-        # Check jika instance sudah diluncurkan untuk placeId tertentu
         if instance not in instance_status or not instance_status[instance]:
             s = subprocess.run(f"{adb} -s {instance} shell pidof com.roblox.client", capture_output=True, text=True)
             pid = s.stdout.strip()
             if not pid:
                 subprocess.run(f"{adb} -s {instance} shell am start -a android.intent.action.VIEW -d roblox://placeId={place_id}")
                 print(f"Launched into game using {instance}")
-                instance_status[instance] = True  # Tandai instance telah diluncurkan untuk placeId tertentu
+                instance_status[instance] = True  
         else:
-            # Check jika Roblox client berhenti atau tidak terdeteksi
             s = subprocess.run(f"{adb} -s {instance} shell pidof com.roblox.client", capture_output=True, text=True)
             pid = s.stdout.strip()
             if not pid:
