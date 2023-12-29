@@ -189,6 +189,7 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
         end
     end)
 
+	wait(0.1)
     coroutine.resume(co)
 end
 
