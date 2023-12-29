@@ -152,7 +152,8 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
         end)
 
 
-	print(item, price)		
+	print("item " .. item)
+	print(gems)
 	if amount == nil then
 	        amount = 1
 	    end
