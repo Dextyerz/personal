@@ -47,7 +47,6 @@ local function GetThumbnailImage(ThumbnailID)
 end
 
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, thumb, goldenthum)
-    
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
     local name = game.Players.LocalPlayer.Name
     local snipeMessage = "Successfully sniped a "
@@ -149,77 +148,79 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     local type = {}
     pcall(function()
         type = Library.Directory.Pets[item]
-end)
+    end)
 
     if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
-        local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        if bought == true then
-            local Thumbnail = type.thumbnail
-            local GoldenThumbnail = type.goldenThumbnail
-            processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
-        end
+        spawn(function()
+            local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+            if bought == true then
+                local Thumbnail = type.thumbnail
+                local GoldenThumbnail = type.goldenThumbnail
+                processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
+            end
+        end)
     elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
-        local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        if bought == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username)
-        end
+        spawn(function()
+            local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+            if bought == true then
+                processListingInfo(uid, gems, item, version, shiny, amount, username)
+            end
+        end)
     elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
-        local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        if bought == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username)
-        end
+        spawn(function()
+            local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+            if bought == true then
+                processListingInfo(uid, gems, item, version, shiny, amount, username)
+            end
+        end)
     elseif type.huge and gems / amount <= 1000000 then
-        local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        if bought == true then
-            local Thumbnail = type.thumbnail
-            local GoldenThumbnail = type.goldenThumbnail
-            processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
-        end     
+        spawn(function()
+            local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+            if bought == true then
+                local Thumbnail = type.thumbnail
+                local GoldenThumbnail = type.goldenThumbnail
+                processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
+            end
+        end)
     elseif type.titanic and gems / amount <= 10000000 then
-        local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        if bought == true then
-            local Thumbnail = type.thumbnail
-            local GoldenThumbnail = type.goldenThumbnail
-            processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
-        end
-    end
-end
-
-local function printTable(tab, indent)
-    indent = indent or 0
-    for key, value in pairs(tab) do
-        if type(value) == "table" then
-            print(("\t"):rep(indent) .. key .. " (table):")
-            printTable(value, indent + 1)
-        else
-            print(("\t"):rep(indent) .. key .. ":", value)
-        end
+        spawn(function()
+            local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+            if bought == true then
+                local Thumbnail = type.thumbnail
+                local GoldenThumbnail = type.goldenThumbnail
+                processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
+            end
+        end)
     end
 end
 
 Booths_Broadcast.OnClientEvent:Connect(function(username, message)
-    local playerID = message['PlayerID']
-    if type(message) == "table" then
-        local listing = message["Listings"]
-        for key, value in pairs(listing) do
-            if type(value) == "table" then
-                local uid = key
-                local gems = value["DiamondCost"]
-                local itemdata = value["ItemData"]
+    local playerIDSuccess, playerError = pcall(function()
+	playerID = message['PlayerID']
+    end)
+    if playerIDSuccess then
+        if type(message) == "table" then
+            local listing = message["Listings"]
+            for key, value in pairs(listing) do
+                if type(value) == "table" then
+                    local uid = key
+                    local gems = value["DiamondCost"]
+                    local itemdata = value["ItemData"]
 
-                if itemdata then
-                    local data = itemdata["data"]
+                    if itemdata then
+                        local data = itemdata["data"]
 
-                    if data then
-                        local item = data["id"]
-                        local version = data["pt"]
-                        local shiny = data["sh"]
-                        local amount = data["_am"]
-                        checklisting(uid, gems, item, version, shiny, amount, username , playerID)
+                        if data then
+                            local item = data["id"]
+                            local version = data["pt"]
+                            local shiny = data["sh"]
+                            local amount = data["_am"]
+                            checklisting(uid, gems, item, version, shiny, amount, username , playerID)
+                        end
                     end
                 end
             end
-        end
+	end
     end
 end)
 
