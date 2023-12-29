@@ -143,55 +143,47 @@ end
 
 
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
-    local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
-    gems = tonumber(gems)
-    local type = {}
-    pcall(function()
-        type = Library.Directory.Pets[item]
-    end)
+    spawn(function()
+        local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
+        gems = tonumber(gems)
+        local type = {}
+        pcall(function()
+            type = Library.Directory.Pets[item]
+        end)
 
-    if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
-        spawn(function()
+        if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
             local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
             if bought == true then
                 local Thumbnail = type.thumbnail
                 local GoldenThumbnail = type.goldenThumbnail
                 processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
             end
-        end)
-    elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
-        spawn(function()
+        elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
             local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
             if bought == true then
                 processListingInfo(uid, gems, item, version, shiny, amount, username)
             end
-        end)
-    elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
-        spawn(function()
+        elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
             local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
             if bought == true then
                 processListingInfo(uid, gems, item, version, shiny, amount, username)
             end
-        end)
-    elseif type.huge and gems / amount <= 1000000 then
-        spawn(function()
+        elseif type.huge and gems / amount <= 1000000 then
             local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
             if bought == true then
                 local Thumbnail = type.thumbnail
                 local GoldenThumbnail = type.goldenThumbnail
                 processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
             end
-        end)
-    elseif type.titanic and gems / amount <= 10000000 then
-        spawn(function()
+        elseif type.titanic and gems / amount <= 10000000 then
             local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
             if bought == true then
                 local Thumbnail = type.thumbnail
                 local GoldenThumbnail = type.goldenThumbnail
                 processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
             end
-        end)
-    end
+        end
+    end)
 end
 
 Booths_Broadcast.OnClientEvent:Connect(function(username, message)
