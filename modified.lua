@@ -50,7 +50,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
     local name = game.Players.LocalPlayer.Name
-    local snipeMessage = "Successfully sniped a "
+    local snipeMessage = "Successfully sniped a \n"
     local tag = ""
     local thumburl = "https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
     if version then
@@ -69,7 +69,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     snipeMessage = snipeMessage .. version
     
     if shiny then
-        snipeMessage = snipeMessage .. " Shiny "
+        snipeMessage = snipeMessage .. "Shiny "
     end
     
     snipeMessage = snipeMessage .. "**" .. (item) .. "**"
