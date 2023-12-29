@@ -135,27 +135,31 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
         type = Library.Directory.Pets[item]
 end)
 
-    if type.exclusiveLevel and gems <= 10000 and item ~= "Banana" and item ~= "Coin" then
+    if amount == nil then
+        amount = 1
+    end
+    
+    if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
         end
-    elseif item == "Titanic Christmas Present" and gems <= 25000 then
+    elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
         end
-    elseif string.find(item, "Exclusive") and gems <= 25000 then
+    elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
         end
-    elseif type.huge and gems <= 1000000 then
+    elseif type.huge and gems / amount <= 1000000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
         end     
-    elseif type.titanic and gems <= 10000000 then
+    elseif type.titanic and gems / amount <= 10000000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
