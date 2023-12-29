@@ -41,12 +41,10 @@ end)
 
 local function GetThumbnailImage(ThumbnailID)
     local Image = string.split(ThumbnailID, "rbxassetid://")[2]
-    Image = game:HttpGet("https://thumbnails.roblox.com/v1/assets?assetIds=" .. Image .. "&returnPolicy=PlaceHolder&size=420x420&format=Png&isCircular=false")
+    Image = game:HttpGet("https://thumbnails.roproxy.com/v1/assets?assetIds=" .. Image .. "&returnPolicy=PlaceHolder&size=420x420&format=Png&isCircular=false")
     Image = game:GetService("HttpService"):JSONDecode(Image).data[1].imageUrl
     return Image
 end
-
-
 
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, thumb, goldenthum)
     
