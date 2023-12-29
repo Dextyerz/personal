@@ -39,37 +39,26 @@ game:GetService("Players").LocalPlayer.Idled:Connect(function()
     bb:ClickButton2(Vector2.new())
 end)
 
-local function GetThumbnailImage(ThumbnailID)
-    local Image = string.split(ThumbnailID, "rbxassetid://")[2]
-    Image = game:HttpGet("https://thumbnails.roproxy.com/v1/assets?assetIds=" .. Image .. "&returnPolicy=PlaceHolder&size=420x420&format=Png&isCircular=false")
-    Image = game:GetService("HttpService"):JSONDecode(Image).data[1].imageUrl
-    return Image
-end
 
-local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, thumb, goldenthum)
-    
+local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
     local name = game.Players.LocalPlayer.Name
     local snipeMessage = "Successfully sniped a "
     local tag = ""
-    local thumburl = "https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg"
     if version then
         if version == 2 then
             version = "Rainbow "
-            thumburl = GetThumbnailImage(thumb)
         elseif version == 1 then
             version = "Golden "
-            thumburl = GetThumbnailImage(goldenthum)
         end
     else
-        version = ""
-        thumburl = GetThumbnailImage(thumb)
+       version = ""
     end
     
     snipeMessage = snipeMessage .. version
     
     if shiny then
-        snipeMessage = snipeMessage .. "Shiny "
+        snipeMessage = snipeMessage .. " Shiny "
     end
     
     snipeMessage = snipeMessage .. "**" .. (item) .. "**"
@@ -91,9 +80,6 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                 ['title'] = snipeMessage,
                 ["color"] = tonumber(0x33dd99),
                 ["timestamp"] = DateTime.now():ToIsoDate(),
-                ['thumbnail'] = {
-                    ['url'] = thumburl,
-                },
                 ['fields'] = {
                     {
                         ['name'] = "Account Name:",
@@ -141,8 +127,6 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     end
 end
 
-
-
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
     local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
     gems = tonumber(gems)
@@ -151,40 +135,30 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
         type = Library.Directory.Pets[item]
 end)
 
-if amount == nil then
-        amount = 1
-    end
-
-    if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
-        local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        if bought == true then
-            local Thumbnail = type.thumbnail
-            local GoldenThumbnail = type.goldenThumbnail
-            processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
-        end
-    elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
+    if type.exclusiveLevel and gems <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
         end
-    elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
+    elseif item == "Titanic Christmas Present" and gems <= 25000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
         end
-    elseif type.huge and gems / amount <= 1000000 then
+    elseif string.find(item, "Exclusive") and gems <= 25000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
-            local Thumbnail = type.thumbnail
-            local GoldenThumbnail = type.goldenThumbnail
-            processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
+        end
+    elseif type.huge and gems <= 1000000 then
+        local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+        if bought == true then
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
         end     
-    elseif type.titanic and gems / amount <= 10000000 then
+    elseif type.titanic and gems <= 10000000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
-            local Thumbnail = type.thumbnail
-            local GoldenThumbnail = type.goldenThumbnail
-            processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
         end
     end
 end
