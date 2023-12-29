@@ -187,9 +187,10 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
                 processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
             end
         end
+	wait(0.1)
     end)
 
-	wait(0.1)
+
     coroutine.resume(co)
 end
 
