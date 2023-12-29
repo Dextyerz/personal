@@ -143,7 +143,7 @@ end
 
 
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
-    spawn(function()
+    local co = coroutine.create(function()
         local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
         gems = tonumber(gems)
         local type = {}
@@ -184,6 +184,8 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
             end
         end
     end)
+
+    coroutine.resume(co)
 end
 
 Booths_Broadcast.OnClientEvent:Connect(function(username, message)
