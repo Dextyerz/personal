@@ -143,14 +143,14 @@ end
 
 
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
-    local co = coroutine.create(function()
+    spawn(function()
         local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
         gems = tonumber(gems)
         local type = {}
         pcall(function()
             type = Library.Directory.Pets[item]
         end)
-			
+
 	if amount == nil then
 	        amount = 1
 	    end
@@ -187,11 +187,7 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
                 processListingInfo(uid, gems, item, version, shiny, amount, username, Thumbnail, GoldenThumbnail)
             end
         end
-	wait(0.1)
     end)
-
-
-    coroutine.resume(co)
 end
 
 Booths_Broadcast.OnClientEvent:Connect(function(username, message)
