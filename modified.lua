@@ -151,6 +151,8 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
             type = Library.Directory.Pets[item]
         end)
 
+
+	print(item, price)		
 	if amount == nil then
 	        amount = 1
 	    end
