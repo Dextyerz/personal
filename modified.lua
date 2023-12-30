@@ -195,7 +195,7 @@ end)
 
 TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
                 print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
-                wait(10)
+                wait(5)
                 jumpToServer()
         end) 
 
@@ -229,7 +229,7 @@ end
 
 while wait(0.1) do
     PlayerInServer = #Players:GetPlayers()
-    if PlayerInServer < 25 or os.time() >= ostime + 1080 then
+    if PlayerInServer < 25 or os.time() >= ostime + 1020 then
         jumpToServer()
         break
     end
