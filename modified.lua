@@ -205,6 +205,7 @@ local function jumpToServer()
     local req = request({ Url = string.format(sfUrl, 15502339080, "Desc", 100) }) 
     local body = game:GetService("HttpService"):JSONDecode(req.Body) 
     local deep = math.random(1, 3)
+    local maxping = 70
     if deep > 1 then 
         for i = 1, deep, 1 do 
             req = request({ Url = string.format(sfUrl .. "&cursor=" .. body.nextPageCursor, 15502339080, "Desc", 100) }) 
@@ -215,7 +216,7 @@ local function jumpToServer()
     local servers = {} 
     if body and body.data then 
         for i, v in next, body.data do 
-            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
+            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId and v.ping <= maxping then
                 table.insert(servers, 1, v.id)
             end
         end
