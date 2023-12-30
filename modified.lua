@@ -40,7 +40,7 @@ game:GetService("Players").LocalPlayer.Idled:Connect(function()
 end)
 
 
-local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, status)
+local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
     local name = game.Players.LocalPlayer.Name
     local snipeMessage = "Successfully sniped a "
@@ -130,7 +130,7 @@ end)
     if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username, bought)
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
         end
     elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
