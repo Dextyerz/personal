@@ -123,7 +123,6 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
         type = Library.Directory.Pets[item]
 end)
 
-    
     if amount == nil then
         amount = 1
     end
@@ -169,36 +168,30 @@ local function printTable(tab, indent)
 end
 
 Booths_Broadcast.OnClientEvent:Connect(function(username, message)
-    if type(message) ~= "table" or message['PlayerID'] == nil then
-        return
-    end
-    
-    local playerID = message['PlayerID']
-    local listing = message["Listings"]
+    if type(message) == "table" and message['PlayerID'] ~= nil then
+        local playerID = message['PlayerID']
+        local listing = message["Listings"]
+        for key, value in pairs(listing) do
+            if type(value) == "table" then
+                local uid = key
+                local gems = value["DiamondCost"]
+                local itemdata = value["ItemData"]
 
-    for key, value in pairs(listing) do
-        if type(value) == "table" then
-            local gems = value["DiamondCost"]
-            local uid = key
-            local itemdata = value["ItemData"]
+                if itemdata then
+                    local data = itemdata["data"]
 
-            if itemdata then
-                local data = itemdata["data"]
-
-                if data then
-                    local item = data["id"]
-                    local version = data["pt"]
-                    local shiny = data["sh"]
-                    local amount = data["_am"]
-                    print(item)
-                    print(gems)
-                    checklisting(uid, gems, item, version, shiny, amount, username, playerID)
+                    if data then
+                        local item = data["id"]
+                        local version = data["pt"]
+                        local shiny = data["sh"]
+                        local amount = data["_am"]
+                        checklisting(uid, gems, item, version, shiny, amount, username , playerID)
+                    end
                 end
             end
         end
     end
 end)
-
 
 TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
                 print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
@@ -212,7 +205,6 @@ local function jumpToServer()
     local req = request({ Url = string.format(sfUrl, 15502339080, "Desc", 100) }) 
     local body = game:GetService("HttpService"):JSONDecode(req.Body) 
     local deep = math.random(1, 3)
-    local maxping = 70
     if deep > 1 then 
         for i = 1, deep, 1 do 
             req = request({ Url = string.format(sfUrl .. "&cursor=" .. body.nextPageCursor, 15502339080, "Desc", 100) }) 
