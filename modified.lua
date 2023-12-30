@@ -123,7 +123,7 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
         type = Library.Directory.Pets[item]
 end)
 
-    print(item .. "price : " .. gems)
+    
     if amount == nil then
         amount = 1
     end
@@ -190,6 +190,8 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     local version = data["pt"]
                     local shiny = data["sh"]
                     local amount = data["_am"]
+                    print(item)
+                    print(gems)
                     checklisting(uid, gems, item, version, shiny, amount, username, playerID)
                 end
             end
