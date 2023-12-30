@@ -168,30 +168,34 @@ local function printTable(tab, indent)
 end
 
 Booths_Broadcast.OnClientEvent:Connect(function(username, message)
+    if type(message) ~= "table" or message['PlayerID'] == nil then
+        return
+    end
+    
     local playerID = message['PlayerID']
-    if type(message) == "table" then
-        local listing = message["Listings"]
-        for key, value in pairs(listing) do
-            if type(value) == "table" then
-                local uid = key
-                local gems = value["DiamondCost"]
-                local itemdata = value["ItemData"]
+    local listing = message["Listings"]
 
-                if itemdata then
-                    local data = itemdata["data"]
+    for key, value in pairs(listing) do
+        if type(value) == "table" then
+            local gems = value["DiamondCost"]
+            local uid = key
+            local itemdata = value["ItemData"]
 
-                    if data then
-                        local item = data["id"]
-                        local version = data["pt"]
-                        local shiny = data["sh"]
-                        local amount = data["_am"]
-                        checklisting(uid, gems, item, version, shiny, amount, username , playerID)
-                    end
+            if itemdata then
+                local data = itemdata["data"]
+
+                if data then
+                    local item = data["id"]
+                    local version = data["pt"]
+                    local shiny = data["sh"]
+                    local amount = data["_am"]
+                    checklisting(uid, gems, item, version, shiny, amount, username, playerID)
                 end
             end
         end
     end
 end)
+
 
 TeleportService.TeleportInitFailed:Connect(function(player, resultEnum, msg)
                 print(string.format("server: teleport %s failed, resultEnum:%s, msg:%s", player.Name, tostring(resultEnum), msg))
