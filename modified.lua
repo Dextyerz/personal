@@ -1,5 +1,5 @@
 local osclock = os.clock()
-local ostime = os.time()
+local ostimeold = os.time()
 local TeleportService = game:GetService("TeleportService")
 repeat wait() until game:IsLoaded()
 
@@ -237,8 +237,8 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end) 
 
-while wait(0.1) do
-    if os.time() >= ostime + 1000 then
+while wait(5) do
+    if os.time() >= ostimeold + 1000 then
         jumpToServer()
         break
     end
