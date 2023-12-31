@@ -1,4 +1,4 @@
-local ostime = os.time()
+local osclock = os.clock()
 local TeleportService = game:GetService("TeleportService")
 repeat wait() until game:IsLoaded()
 
