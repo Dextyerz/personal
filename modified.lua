@@ -27,7 +27,7 @@ if not getgenv().a then
     
 end
 
-Players.PlayerRemoving:Connect(function(plr)
+game.Players.PlayerRemoving: connect (function (plr)
     if plr == game.Players.LocalPlayer then
       game:GetService('TeleportService'):Teleport(game.PlaceId)
     end
@@ -227,9 +227,16 @@ local function jumpToServer()
     game:GetService("TeleportService"):TeleportToPlaceInstance(15502339080, servers[math.random(1, randomCount)], game:GetService("Players").LocalPlayer) 
 end
 
-while wait(0.1) do
+
+Players.PlayerRemoving:Connect(function(player)
     PlayerInServer = #Players:GetPlayers()
-    if PlayerInServer < 25 or os.time() >= ostime + 1020 then
+    if PlayerInServer < 25 then
+        jumpToServer()
+    end
+end) 
+
+while wait(0.1) do
+    if math.floor(os.clock() - osclock) >= math.random(900, 1200) then
         jumpToServer()
         break
     end
