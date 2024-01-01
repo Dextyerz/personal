@@ -1,10 +1,8 @@
-local osclock = os.clock()
 local ostimeold = os.time()
-local TeleportService = game:GetService("TeleportService")
 repeat wait() until game:IsLoaded()
-
 setfpscap(8)
 game:GetService("RunService"):Set3dRenderingEnabled(false)
+local TeleportService = game:GetService("TeleportService")
 local Booths_Broadcast = game:GetService("ReplicatedStorage").Network:WaitForChild("Booths_Broadcast")
 local message1 = {}
 local Players = game:GetService('Players')
@@ -15,17 +13,6 @@ for i,v in ipairs(game.Players:GetPlayers()) do
     if v.UserId ~= game.Players.LocalPlayer.UserId and v.Character then
         v.Character:ClearAllChildren()
     end
-end
-
-if not getgenv().a then
-    getgenv().a = true
-    local vu = game:GetService("VirtualUser")
-    game:GetService("Players").LocalPlayer.Idled:connect(function()
-        vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-        wait(1)
-        vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-    end)
-    
 end
 
 game.Players.PlayerRemoving: connect (function (plr)
@@ -152,18 +139,6 @@ end)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true then
             processListingInfo(uid, gems, item, version, shiny, amount, username)
-        end
-    end
-end
-
-local function printTable(tab, indent)
-    indent = indent or 0
-    for key, value in pairs(tab) do
-        if type(value) == "table" then
-            print(("\t"):rep(indent) .. key .. " (table):")
-            printTable(value, indent + 1)
-        else
-            print(("\t"):rep(indent) .. key .. ":", value)
         end
     end
 end
