@@ -232,7 +232,7 @@ end
 
 Players.PlayerRemoving:Connect(function(player)
     PlayerInServer = #Players:GetPlayers()
-    if PlayerInServer < 25 then
+    if PlayerInServer < 35 then
         jumpToServer()
     end
 end) 
