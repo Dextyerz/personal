@@ -69,10 +69,13 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         amount = 1
     end
 
+
+    if status == true then
     if string.find(item, "Huge") then
         tag = "<@870106984236609656> NEW HUGE BABY"
     elseif string.find(item, "Titanic") and item ~= "Titanic Christmas Present" then
         tag = "@everyone RAWRRR GOT TITANIC BRO"
+    end
     end
     
     message1 = {
