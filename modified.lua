@@ -116,9 +116,11 @@ end
         }
     }
 
-    local http = game:GetService("HttpService")
-    local jsonMessage = http:JSONEncode(message1)
-    http:PostAsync(url, jsonMessage)
+    task.spawn(function()
+        local http = game:GetService("HttpService")
+        local jsonMessage = http:JSONEncode(message1)
+        http:PostAsync(url, jsonMessage)
+    end)
 end
 
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
