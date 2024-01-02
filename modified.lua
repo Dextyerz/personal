@@ -40,7 +40,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         snipeMessage = "Successfully sniped a "
         url = getgenv().webhook
         color = tonumber(0x00ff00)
-    else
+    elseif status == false then
         snipeMessage = "Failed to snipe a "
         url = getgenv().failedwebhook
         color = tonumber(0xff0000)
