@@ -204,16 +204,9 @@ local function jumpToServer()
     game:GetService("TeleportService"):TeleportToPlaceInstance(15502339080, servers[math.random(1, nextrandom)], game:GetService("Players").LocalPlayer) 
 end
 
-
-Players.PlayerRemoving:Connect(function(player)
-    PlayerInServer = #Players:GetPlayers()
-    if PlayerInServer < 35 then
-        jumpToServer()
-    end
-end) 
-
 while wait(5) do
-    if os.time() >= ostimeold + 1000 then
+    PlayerInServer = #Players:GetPlayers()
+    if PlayerInServer < 35 or os.time() >= ostimeold + 1000 then
         jumpToServer()
         break
     end
