@@ -1,4 +1,3 @@
-getgenv().failedwebhook = "https://discord.com/api/webhooks/1166673773588647996/adIpnyKJ0sXJ6ZIpzAxJv1KDZJS6ICCrTrcrXj4-RITeIvSUTDNxzZohjJIPjzmS3YD0"
 local ostimeold = os.time()
 repeat wait() until game:IsLoaded()
 setfpscap(8)
@@ -9,7 +8,6 @@ local message1 = {}
 local Players = game:GetService('Players')
 local PlayerInServer = #Players:GetPlayers()
 local Librarys = require(game.ReplicatedStorage:WaitForChild('Library'))
-
 
 for i,v in ipairs(game.Players:GetPlayers()) do
     if v.UserId ~= game.Players.LocalPlayer.UserId and v.Character then
@@ -30,33 +28,16 @@ game:GetService("Players").LocalPlayer.Idled:Connect(function()
 end)
 
 
-local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, status)
+local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
     local name = game.Players.LocalPlayer.Name
-    local snipeMessage = ""
-    local url, color
-
-    if status then
-        snipeMessage = "Successfully sniped a "
-        url = getgenv().webhook
-        color = tonumber(0x00ff00)
-        if string.find(item, "Huge") then
-        tag = "<@870106984236609656> NEW HUGE BABY"
-        elseif string.find(item, "Titanic") and item ~= "Titanic Christmas Present" then
-            tag = "@everyone RAWRRR GOT TITANIC BRO"
-        end
-    else
-        snipeMessage = "Failed to snipe a "
-        url = getgenv().failedwebhook
-        color = tonumber(0xff0000)
-    end
-    
+    local snipeMessage = "Successfully sniped a "
     local tag = ""
     if version then
         if version == 2 then
-            version = "**Rainbow** "
+            version = "Rainbow "
         elseif version == 1 then
-            version = "**Golden** "
+            version = "Golden "
         end
     else
        version = ""
@@ -65,7 +46,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     snipeMessage = snipeMessage .. version
     
     if shiny then
-        snipeMessage = snipeMessage .. " **Shiny** "
+        snipeMessage = snipeMessage .. " Shiny "
     end
     
     snipeMessage = snipeMessage .. "**" .. (item) .. "**"
@@ -73,37 +54,43 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     if amount == nil then
         amount = 1
     end
+
+    if string.find(item, "Huge") then
+        tag = "<@870106984236609656> NEW HUGE BABY"
+    elseif string.find(item, "Titanic") and item ~= "Titanic Christmas Present" then
+        tag = "@everyone RAWRRR GOT TITANIC BRO"
+    end
     
     message1 = {
         ['content'] = tag,
         ['embeds'] = {
             {
                 ['title'] = snipeMessage,
-                ["color"] = color,
+                ["color"] = tonumber(0x33dd99),
                 ["timestamp"] = DateTime.now():ToIsoDate(),
                 ['fields'] = {
                     {
-                        ['name'] = "__Account Name:__",
+                        ['name'] = "Account Name:",
                         ['value'] = "||" .. tostring(name) .. "||",
                     },
                     {
-                        ['name'] = "__Price:__",
+                        ['name'] = "Price:",
                         ['value'] = tostring(gems) .. " 💎",
                     },
                     {
-                        ['name'] = "__Purchased From:__",
+                        ['name'] = "Purchased From:",
                         ['value'] = "||" .. tostring(boughtFrom) .. "||",
                     },
                     {
-                        ['name'] = "__Amount:__",
+                        ['name'] = "Amount:",
                         ['value'] = tostring(amount) .. "x",
                     },
                     {
-                        ['name'] = "__Remaining Gems:__",
+                        ['name'] = "Remaining Gems:",
                         ['value'] = tostring(gemamount) .. " 💎",
                     },      
                     {
-                        ['name'] = "__Pet ID:__",
+                        ['name'] = "Pet ID:",
                         ['value'] = "||" .. tostring(uid) .. "||",
                     },
                 },
@@ -132,19 +119,29 @@ end)
     
     if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        processListingInfo(uid, gems, item, version, shiny, amount, username, bought)
+        if bought == true then
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
+        end
     elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        processListingInfo(uid, gems, item, version, shiny, amount, username, bought)
+        if bought == true then
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
+        end
     elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        processListingInfo(uid, gems, item, version, shiny, amount, username, bought)
+        if bought == true then
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
+        end
     elseif type.huge and gems / amount <= 1000000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        processListingInfo(uid, gems, item, version, shiny, amount, username, bought) 
+        if bought == true then
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
+        end     
     elseif type.titanic and gems / amount <= 10000000 then
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        processListingInfo(uid, gems, item, version, shiny, amount, username, bought)
+        if bought == true then
+            processListingInfo(uid, gems, item, version, shiny, amount, username)
+        end
     end
 end
 
