@@ -8,6 +8,7 @@ local message1 = {}
 local Players = game:GetService('Players')
 local PlayerInServer = #Players:GetPlayers()
 local Librarys = require(game.ReplicatedStorage:WaitForChild('Library'))
+local MaxPing = 400
 
 for i,v in ipairs(game.Players:GetPlayers()) do
     if v.UserId ~= game.Players.LocalPlayer.UserId and v.Character then
@@ -209,6 +210,9 @@ while wait(5) do
     if PlayerInServer < 35 or os.time() >= ostimeold + 1000 then
         jumpToServer()
         break
+    end
+    if game.Players.LocalPlayer:GetNetworkPing() * 2000 > MaxPing then
+        jumpToServer()
     end
     for count = 1, #alts, 1 do
         if game.Players:FindFirstChild(alts[count]) and alts[count] ~= game:GetService("Players").LocalPlayer.Name then
