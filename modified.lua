@@ -98,11 +98,9 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         }
     }
 
-    task.spawn(function()
-        local http = game:GetService("HttpService")
-        local jsonMessage = http:JSONEncode(message1)
-        http:PostAsync(url, jsonMessage)
-    end)
+    local http = game:GetService("HttpService")
+    local jsonMessage = http:JSONEncode(message1)
+    http:PostAsync(getgenv().webhook, jsonMessage)
 end
 
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
@@ -193,7 +191,7 @@ local function jumpToServer()
     local servers = {} 
     if body and body.data then 
         for i, v in next, body.data do 
-            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.playing > 30 and v.id ~= game.JobId then
+            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
                 table.insert(servers, 1, v.id)
             end
         end
@@ -207,15 +205,10 @@ local function jumpToServer()
 end
 
 while wait(5) do
-    local MaxPing = 500
-    local getPing = game.Players.LocalPlayer:GetNetworkPing() * 2000
     PlayerInServer = #Players:GetPlayers()
-    if PlayerInServer < 30 or os.time() >= ostimeold + 1000 then
+    if PlayerInServer < 35 or os.time() >= ostimeold + 1000 then
         jumpToServer()
         break
-    end
-    if getPing > MaxPing then
-        jumpToServer()
     end
     for count = 1, #alts, 1 do
         if game.Players:FindFirstChild(alts[count]) and alts[count] ~= game:GetService("Players").LocalPlayer.Name then
