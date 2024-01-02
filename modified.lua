@@ -9,7 +9,7 @@ local message1 = {}
 local Players = game:GetService('Players')
 local PlayerInServer = #Players:GetPlayers()
 local Librarys = require(game.ReplicatedStorage:WaitForChild('Library'))
-local MaxPing = 500
+
 
 for i,v in ipairs(game.Players:GetPlayers()) do
     if v.UserId ~= game.Players.LocalPlayer.UserId and v.Character then
@@ -40,6 +40,11 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         snipeMessage = "Successfully sniped a "
         url = getgenv().webhook
         color = tonumber(0x00ff00)
+        if string.find(item, "Huge") then
+        tag = "<@870106984236609656> NEW HUGE BABY"
+        elseif string.find(item, "Titanic") and item ~= "Titanic Christmas Present" then
+            tag = "@everyone RAWRRR GOT TITANIC BRO"
+        end
     else
         snipeMessage = "Failed to snipe a "
         url = getgenv().failedwebhook
@@ -68,16 +73,6 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     if amount == nil then
         amount = 1
     end
-
-
-if status == true then
-    if string.find(item, "Huge") then
-        tag = "<@870106984236609656> NEW HUGE BABY"
-    elseif string.find(item, "Titanic") and item ~= "Titanic Christmas Present" then
-        tag = "@everyone RAWRRR GOT TITANIC BRO"
-    end
-end
-
     
     message1 = {
         ['content'] = tag,
@@ -215,6 +210,7 @@ local function jumpToServer()
 end
 
 while wait(5) do
+    local MaxPing = 500
     PlayerInServer = #Players:GetPlayers()
     if PlayerInServer < 35 or os.time() >= ostimeold + 1000 then
         jumpToServer()
