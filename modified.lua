@@ -142,7 +142,6 @@ end)
         end
     elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        task.wait(3)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
@@ -154,7 +153,6 @@ end)
         end
     elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        task.wait(3)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
@@ -166,7 +164,6 @@ end)
         end
     elseif type.huge and gems / amount <= 1000000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        task.wait(3)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
@@ -178,7 +175,6 @@ end)
         end
     elseif type.titanic and gems / amount <= 10000000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        task.wait(3)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
