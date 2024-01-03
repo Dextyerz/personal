@@ -1,7 +1,6 @@
 getgenv().failedwebhook = "https://discord.com/api/webhooks/1166673773588647996/adIpnyKJ0sXJ6ZIpzAxJv1KDZJS6ICCrTrcrXj4-RITeIvSUTDNxzZohjJIPjzmS3YD0"
 local ostimeold = os.time()
 repeat wait() until game:IsLoaded()
-setfpscap(8)
 game:GetService("RunService"):Set3dRenderingEnabled(false)
 local TeleportService = game:GetService("TeleportService")
 local Booths_Broadcast = game:GetService("ReplicatedStorage").Network:WaitForChild("Booths_Broadcast")
