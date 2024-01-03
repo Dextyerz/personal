@@ -261,9 +261,6 @@ while wait(5) do
         jumpToServer()
         break
     end
-    if game.Players.LocalPlayer:GetNetworkPing() * 2000 > MaxPing then
-        jumpToServer()
-    end
     for count = 1, #alts, 1 do
         if game.Players:FindFirstChild(alts[count]) and alts[count] ~= game:GetService("Players").LocalPlayer.Name then
             jumpToServer()
