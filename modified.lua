@@ -135,9 +135,8 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     if amount == nil then
         amount = 1
     end
-
+	task.wait(3.05)
     local price = gems / amount
-    task.wait(3.05)
     if type.exclusiveLevel and price <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
         processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
