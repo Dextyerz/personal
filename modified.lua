@@ -28,11 +28,28 @@ game:GetService("Players").LocalPlayer.Idled:Connect(function()
 end)
 
 
-local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom)
+local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, stats)
     local gemamount = game:GetService("Players").LocalPlayer.leaderstats["💎 Diamonds"].Value
     local name = game.Players.LocalPlayer.Name
-    local snipeMessage = "Successfully sniped a "
+    local snipeMessage = ""
     local tag = ""
+    local url, color
+
+    if stats == true then
+        snipeMessage = "Successfully sniped a "
+        url = getgenv().webhook
+        color = tonumber(0x00ff00)
+        if string.find(item, "Huge") then
+        tag = "<@870106984236609656> NEW HUGE BABY"
+        elseif string.find(item, "Titanic") and item ~= "Titanic Christmas Present" then
+            tag = "@everyone RAWRRR GOT TITANIC BRO"
+        end
+    elseif stats == false then
+        snipeMessage = "Failed to snipe a "
+        url = getgenv().failedwebhook
+        color = tonumber(0xff0000)
+    end
+    
     if version then
         if version == 2 then
             version = "Rainbow "
@@ -55,42 +72,36 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         amount = 1
     end
 
-    if string.find(item, "Huge") then
-        tag = "<@870106984236609656> NEW HUGE BABY"
-    elseif string.find(item, "Titanic") and item ~= "Titanic Christmas Present" then
-        tag = "@everyone RAWRRR GOT TITANIC BRO"
-    end
-    
     message1 = {
         ['content'] = tag,
         ['embeds'] = {
             {
                 ['title'] = snipeMessage,
-                ["color"] = tonumber(0x33dd99),
+                ["color"] = color,
                 ["timestamp"] = DateTime.now():ToIsoDate(),
                 ['fields'] = {
                     {
-                        ['name'] = "Account Name:",
+                        ['name'] = "__Account Name:__",
                         ['value'] = "||" .. tostring(name) .. "||",
                     },
                     {
-                        ['name'] = "Price:",
+                        ['name'] = "__Price:__",
                         ['value'] = tostring(gems) .. " 💎",
                     },
                     {
-                        ['name'] = "Purchased From:",
+                        ['name'] = "__Purchased From:__",
                         ['value'] = "||" .. tostring(boughtFrom) .. "||",
                     },
                     {
-                        ['name'] = "Amount:",
+                        ['name'] = "__Amount:__",
                         ['value'] = tostring(amount) .. "x",
                     },
                     {
-                        ['name'] = "Remaining Gems:",
+                        ['name'] = "__Remaining Gems:__",
                         ['value'] = tostring(gemamount) .. " 💎",
                     },      
                     {
-                        ['name'] = "Pet ID:",
+                        ['name'] = "__Pet ID:__",
                         ['value'] = "||" .. tostring(uid) .. "||",
                     },
                 },
@@ -107,6 +118,7 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
     gems = tonumber(gems)
     local type = {}
+    local status
     pcall(function()
         type = Library.Directory.Pets[item]
 end)
@@ -121,7 +133,11 @@ end)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username)
+            local status = true
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
+        else if bought == false or bought1 == false or boughtf == false then
+            local status = false
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
         end
     elseif item == "Titanic Christmas Present" and gems / amount <= 25000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
@@ -129,7 +145,11 @@ end)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username)
+            local status = true
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
+        else if bought == false or bought1 == false or boughtf == false then
+            local status = false
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
         end
     elseif string.find(item, "Exclusive") and gems / amount <= 25000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
@@ -137,7 +157,11 @@ end)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username)
+            local status = true
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
+        else if bought == false or bought1 == false or boughtf == false then
+            local status = false
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
         end
     elseif type.huge and gems / amount <= 1000000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
@@ -145,15 +169,23 @@ end)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username)
-        end    
+            local status = true
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
+        else if bought == false or bought1 == false or boughtf == false then
+            local status = false
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
+        end
     elseif type.titanic and gems / amount <= 10000000 then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         task.wait(3)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
-            processListingInfo(uid, gems, item, version, shiny, amount, username)
+            local status = true
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
+        else if bought == false or bought1 == false or boughtf == false then
+            local status = false
+            processListingInfo(uid, gems, item, version, shiny, amount, username, status)
         end
     end
 end
