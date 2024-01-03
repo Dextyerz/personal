@@ -127,10 +127,9 @@ end)
     if amount == nil then
         amount = 1
     end
-    
+    task.wait(3.1)
     if type.exclusiveLevel and gems / amount <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local boughtf = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
-        task.wait(3)
         local bought = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         local bought1 = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
         if bought == true or bought1 == true or boughtf == true then
