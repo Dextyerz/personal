@@ -32,7 +32,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     local weburl, webContent, webcolor
 
     local versionVal = { [1] = "Golden", [2] = "Rainbow" }
-    local versionStr = versionVal[version] or (version == nil and "Normal" or "")
+    local versionStr = versionVal[version] or (version == nil and "" or "")
 	
     if boughtStatus then
 	webcolor = tonumber(0x00ff00)
@@ -97,7 +97,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                 },
 		["footer"] = {
                         ["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&", -- optional
-                        ["text"] = "Heavily Modified by Root"
+                        ["text"] = "Heavily Modified by Dextyerz"
 		}
             },
         }
