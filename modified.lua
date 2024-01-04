@@ -266,7 +266,7 @@ Players.PlayerAdded:Connect(function(player)
 end) 
 
 while task.wait(1) do
-    if math.floor(os.clock() - osclock) >= math.random(900, 1200) then
+    if math.floor(os.clock() - osclock) >= math.random(900, 1100) then
         while task.wait(1) do
 	    jumpToServer()		
 	end	
