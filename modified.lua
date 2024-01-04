@@ -18,11 +18,6 @@ local http = game:GetService("HttpService")
 local ts = game:GetService("TeleportService")
 local rs = game:GetService("ReplicatedStorage")
 local Library = require(rs:WaitForChild('Library'))
-local snipeNormal
-
-if not snipeNormalPets then
-    snipeNormalPets = false
-end
 
 local vu = game:GetService("VirtualUser")
 Players.LocalPlayer.Idled:connect(function()
