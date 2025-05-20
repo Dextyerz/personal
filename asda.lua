@@ -27,7 +27,7 @@ task.spawn(function()
 			warn("✅ StockChance ditemukan:", stockChance)
 			break
 		end
-        queue_on_teleport([[loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/NoLag-id/No-Lag-HUB/refs/heads/main/Loader/LoaderV1.lua"))()]])
+        queue_on_teleport([[loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Dextyerz/personal/refs/heads/main/asda.lua"))()]])
 		local Next
 		repeat
 			local Servers = ListServers(Next)
