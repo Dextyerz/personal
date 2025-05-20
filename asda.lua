@@ -5,50 +5,77 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local eventShopData = require(ReplicatedStorage.Data.EventShopData)
 
 local Api = "https://games.roblox.com/v1/games/"
-local _place, _id = game.PlaceId, game.JobId
-local _servers = Api .. _place .. "/servers/Public?sortOrder=Desc&limit=100"
+local PlaceId, CurrentJobId = game.PlaceId, game.JobId
+local ServerAPI = Api .. PlaceId .. "/servers/Public?sortOrder=Desc&limit=100"
 
--- Set untuk menyimpan server yang sudah dicoba
+-- Cache untuk server yang pernah dicoba
+local cacheFile = "ServerCache.json"
 local triedServers = {}
-triedServers[_id] = true -- Tambahkan server saat ini agar tidak balik ke sini
 
--- Fungsi ambil list server
-function ListServers(cursor)
-	local raw = game:HttpGet(_servers .. ((cursor and "&cursor=" .. cursor) or ""))
-	return Http:JSONDecode(raw)
+if isfile and isfile(cacheFile) then
+    local ok, result = pcall(function()
+        return Http:JSONDecode(readfile(cacheFile))
+    end)
+    if ok and type(result) == "table" then
+        triedServers = result
+    end
+end
+
+triedServers[CurrentJobId] = true
+
+local function saveCache()
+    if writefile then
+        pcall(function()
+            writefile(cacheFile, Http:JSONEncode(triedServers))
+        end)
+    end
+end
+
+local function ListServers(cursor)
+    local raw = game:HttpGet(ServerAPI .. ((cursor and "&cursor=" .. cursor) or ""))
+    return Http:JSONDecode(raw)
 end
 
 -- Fungsi utama
 task.spawn(function()
-	while true do
-		local stockChance = eventShopData["Candy Blossom"] and eventShopData["Candy Blossom"].StockChance or 0
+    while true do
+        local stockChance = eventShopData["Candy Blossom"] and eventShopData["Candy Blossom"].StockChance or 0
+        if stockChance > 0 then
+            warn("✅ StockChance ditemukan:", stockChance)
+            break
+        end
 
-		if stockChance > 0 then
-			warn("✅ StockChance ditemukan:", stockChance)
-			break
-		end
+        -- Inject ulang script saat teleport
         queue_on_teleport([[loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Dextyerz/personal/refs/heads/main/asda.lua"))()]])
-		local Next
-		repeat
-			local Servers = ListServers(Next)
-			for i, v in next, Servers.data do
-				if v.playing < v.maxPlayers and not triedServers[v.id] then
-					triedServers[v.id] = true -- tandai server ini agar tidak dicoba lagi
 
-					warn("Teleporting to server:", v.id)
-					local success, err = pcall(TPS.TeleportToPlaceInstance, TPS, _place, v.id, Player)
-					if success then
-						return -- Biarkan teleport berjalan
-					else
-						warn("Teleport gagal:", err)
-					end
-				end
-			end
-			Next = Servers.nextPageCursor
-			task.wait(1)
-		until not Next
+        local cursor = nil
+        local cursorCount = 0
+        local maxCursor = 3
 
-		warn("🔁 Semua server dicoba, mengulang dalam 5 detik...")
-		task.wait(5)
-	end
+        repeat
+            cursorCount += 1
+            local success, result = pcall(ListServers, cursor)
+            if success and result and result.data then
+                for _, server in ipairs(result.data) do
+                    if server.playing < server.maxPlayers and not triedServers[server.id] then
+                        triedServers[server.id] = true
+                        saveCache()
+
+                        warn("🔁 Teleporting ke server:", server.id)
+                        local ok, err = pcall(TPS.TeleportToPlaceInstance, TPS, PlaceId, server.id, Player)
+                        if ok then return end
+                        warn("❌ Gagal teleport:", err)
+                    end
+                end
+                cursor = result.nextPageCursor
+                task.wait(0.5)
+            else
+                warn("❌ Gagal ambil server list.")
+                break
+            end
+        until not cursor or cursorCount >= maxCursor
+
+        warn("🔁 Server tidak ditemukan dalam 3 halaman, coba lagi dalam 5 detik...")
+        task.wait(5)
+    end
 end)
